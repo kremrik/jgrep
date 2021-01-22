@@ -2,3 +2,4 @@ nimcache
 jgrep
 cli
 cli.nim
+testresults

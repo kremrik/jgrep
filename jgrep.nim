@@ -1,15 +1,8 @@
+from io/stdio import readStdin, writeStdout
+
 import json
 import options
 import os
-
-
-proc readStdin(): string = 
-    let inpt = readLine(stdin)
-    return inpt
-
-
-proc writeStdout(output: string) =
-    stdout.writeLine(output)
 
 
 proc getGrepStr(): string =
@@ -25,7 +18,7 @@ proc makeJson(jsonStr: string): JsonNode =
         raise
 
 
-proc findValue(jsonObj: JsonNode, value: string): Option[JsonNode] =
+proc maybefindValueInJson(jsonObj: JsonNode, value: string): Option[JsonNode] =
     let jKind = jsonObj.kind
 
     case jKind:
@@ -39,7 +32,7 @@ proc findValue(jsonObj: JsonNode, value: string): Option[JsonNode] =
             var inner = newJObject()
 
             for key, val in pairs(jsonObj):
-                var res = findValue(val, value)
+                var res = maybefindValueInJson(val, value)
                 if res != none(JsonNode):
                     inner[key] = val
             
@@ -52,17 +45,21 @@ proc findValue(jsonObj: JsonNode, value: string): Option[JsonNode] =
             return none(JsonNode)
 
 
+proc findValueInJson*(jsonData: string, findValueInJson: string): string =
+    let jsonObj = makeJson(jsonData)
+    let searchVal = maybefindValueInJson(jsonObj, findValueInJson)
+
+    if searchVal == none(JsonNode):
+        return "Value '" & findValueInJson & "' not found"
+    else:
+        let output = searchVal.get()
+        return $output
+
+
 proc main() =
     let inpt = readStdin()
     let grepStr = getGrepStr()
-    let jsonObj = makeJson(inpt)
-    let searchVal = findValue(jsonObj, grepStr)
-    
-    if searchVal == none(JsonNode):
-        writeStdout("Value '" & grepStr & "' not found")
-    else:
-        let output = searchVal.get()
-        writeStdout($output)
+    writeStdout(findValueInJson(inpt, grepStr))
 
 
 when isMainModule:
