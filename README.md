@@ -1,5 +1,9 @@
 Having fun testing out Nim
 
+#### Run tests
+```
+$ testament pattern "tests/*.nim
+```
 
 #### Usage
 ```
