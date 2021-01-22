@@ -1,4 +1,4 @@
-from jgrep import findValueInJson
+import ./jgrep
 
 
 # let nullJson = ""

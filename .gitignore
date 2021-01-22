@@ -1,6 +1,6 @@
 nimcache
-jgrep
-cli
-cli.nim
+src/jgrep.out
+tests/tjgrep
 testresults
+testresults.html
 tjgrep

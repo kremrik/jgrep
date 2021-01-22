@@ -1,21 +1,9 @@
-from io/stdio import readStdin, writeStdout
+from ./jgrep/cli import getGrepStr
+from ./jgrep/serde import makeJson
+from ./jgrep/io import readStdin, writeStdout
 
 import json
 import options
-import os
-
-
-proc getGrepStr(): string =
-    let grepStr = paramStr(1)
-    return grepStr
-
-
-proc makeJson(jsonStr: string): JsonNode =
-    try:
-        let parsedObj = parseJson(jsonStr)
-        return parsedObj
-    except JsonParsingError:
-        raise
 
 
 proc maybefindValueInJson(jsonObj: JsonNode, value: string): Option[JsonNode] =
